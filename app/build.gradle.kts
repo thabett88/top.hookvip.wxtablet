@@ -35,6 +35,14 @@ android {
             "-Xno-receiver-assertions"
         )
     }
+
+    applicationVariants.configureEach {
+        outputs.configureEach {
+            this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            outputFileName = "${property.project.name}-${versionName}-${buildType.name}.apk"
+        }
+    }
+
     buildFeatures {
         buildConfig = true
         viewBinding = true
