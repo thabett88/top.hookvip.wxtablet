@@ -1,0 +1,67 @@
+package top.hookvip.wxtablet.entry
+
+import android.view.View
+import android.widget.Button
+import androidx.core.view.isGone
+import com.highcapable.yukihookapi.hook.entity.YukiBaseHooker
+import com.highcapable.yukihookapi.hook.factory.constructor
+import com.highcapable.yukihookapi.hook.factory.field
+import com.highcapable.yukihookapi.hook.log.YLog
+import com.highcapable.yukihookapi.hook.param.PackageParam
+import top.hookvip.wxtablet.data.HostInfo
+import top.hookvip.wxtablet.factory.toAppClass
+import top.hookvip.wxtablet.utils.FastKv
+import top.hookvip.wxtablet.utils.WXConfig
+
+object TabletHooker : YukiBaseHooker() {
+
+    override fun onHook() {
+        if (isWeChat() && doHostInit(this)) {
+            "com.tencent.tinker.loader.app.TinkerApplication".toAppClass()
+                .constructor { paramCount(6) }
+                .hook {
+                    before {
+                        args(0).set(0)
+                    }
+                }
+
+            WXConfig.apply {
+                checkPadTablet?.hook {
+                    after {
+                        result = !Throwable().stackTraceToString().contains("com.tencent.mm.pluginsdk.ui.chat.ChatFooter")
+                    }
+                }
+                visibleLoginButton?.hook {
+                    before {
+                        args(0).cast<Button>()?.let { loginButton ->
+                            if (loginButton.isGone) {
+                                loginButton.visibility = View.VISIBLE
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun isWeChat(): Boolean {
+        return "com.tencent.mm.app.Application".toClassOrNull(appClassLoader) != null
+    }
+
+    private fun doHostInit(packageParam: PackageParam): Boolean {
+        YLog.debug("start hook wechat tablet(${HostInfo.toVerStr()})")
+        FastKv.initialize("${appInfo.dataDir}/files/WeChatTablet/")
+        HostInfo.apply {
+            modulePath = packageParam.moduleAppFilePath
+            appPackageName = packageParam.packageName
+            appClassLoader = packageParam.appClassLoader!!
+            appFilePath = packageParam.appInfo.sourceDir
+            val buildConfigClass = "com.tencent.mm.boot.BuildConfig".toAppClass()
+            isPlay = buildConfigClass.field { name = "BUILD_TAG" }.get().string().contains("_GP_")
+            verName = buildConfigClass.field { name = "VERSION_NAME" }.get().string()
+            verCode = buildConfigClass.field { name = "VERSION_CODE" }.get().int()
+            clientVer = buildConfigClass.field { name = "CLIENT_VERSION_ARM64" }.get().string()
+        }
+        return true
+    }
+}
