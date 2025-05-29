@@ -17,6 +17,9 @@ object TabletHooker : YukiBaseHooker() {
 
     override fun onHook() {
         if (isWeChat() && doHostInit(this)) {
+
+            YLog.debug("start hook wechat tablet(${HostInfo.toVerStr()})")
+
             "com.tencent.tinker.loader.app.TinkerApplication".toAppClass()
                 .constructor { paramCount(6) }
                 .hook {
@@ -49,7 +52,6 @@ object TabletHooker : YukiBaseHooker() {
     }
 
     private fun doHostInit(packageParam: PackageParam): Boolean {
-        YLog.debug("start hook wechat tablet(${HostInfo.toVerStr()})")
         FastKv.initialize("${appInfo.dataDir}/files/WeChatTablet/")
         HostInfo.apply {
             modulePath = packageParam.moduleAppFilePath
