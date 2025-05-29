@@ -1,4 +1,16 @@
-# WeChatTablet
+<div align="center">
+<h1>WeChatTablet</h1>
+
+<a href="https://github.com/Xposed-Modules-Repo/top.hookvip.wxtablet/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/Xposed-Modules-Repo/top.hookvip.wxtablet?label=stars"></a>
+<a href="https://github.com/Xposed-Modules-Repo/top.hookvip.wxtablet/releases"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/Xposed-Modules-Repo/top.hookvip.wxtablet/total?label=Downloads"></a>
+<a href="https://github.com/Xposed-Modules-Repo/top.hookvip.wxtablet/releases/latest"><img alt="GitHub lastest release" src="https://img.shields.io/github/v/release/Xposed-Modules-Repo/top.hookvip.wxtablet"></a>
+
+<a href="https://t.me/HookVipCl"><img alt="Telegram Channel" src="https://img.shields.io/badge/Telegram-频道-blue.svg?logo=telegram"></a>
+<a href="https://t.me/HookVipChat"><img alt="Telegram Channel" src="https://img.shields.io/badge/Telegram-群组-blue.svg?logo=telegram"></a>
+
+<p>用于开启微信平板模式的Xposed模块</p>
+
+</div>  
 
 ## 模块功能
 + 禁用 **TencentTinker** 热补丁
