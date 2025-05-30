@@ -1,3 +1,6 @@
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 plugins {
     autowire(libs.plugins.android.application)
     autowire(libs.plugins.kotlin.android)
@@ -13,7 +16,7 @@ android {
         minSdk = property.project.android.minSdk
         targetSdk = property.project.android.targetSdk
         versionName = property.project.app.versionName
-        versionCode = property.project.app.versionCode
+        versionCode = getReleaseCode()
         ndk.abiFilters.addAll(arrayOf("armeabi-v7a", "arm64-v8a"))
     }
     buildTypes {
@@ -61,3 +64,4 @@ dependencies {
     implementation(io.github.billywei01.fastkv)
     implementation(androidx.core.core.ktx)
 }
+fun getReleaseCode() = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE).toInt()
